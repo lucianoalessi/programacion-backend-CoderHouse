@@ -46,7 +46,7 @@ class ProductManager{
         this.products.push(product);
 
         //creamos el archivo en la ruta (path) y le pasamos el array de objetos products converido a json. 
-        await fs.promises.writeFile(this.path,JSON.stringify(this.products,null,2))
+        await fs.promises.writeFile(this.path,JSON.stringify(this.products,null,2)) // el segundo parametro de stringify es opcional asi que le pusimos null para salterarlo y el 3er parametro es el espacio de sangria. al pasarle un 2 estamos indicando que queremos que la cadena JSON tenga un nivel de sangría de 2 espacios.
     }
 
     getProducts = async () => {
