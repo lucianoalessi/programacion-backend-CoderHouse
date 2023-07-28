@@ -52,9 +52,15 @@ class ProductManager{
     getProducts = async () => {
 
         //Leemos el contenido del archivo almacenado en la ruta (path) y lo almacenamos en una variable.Luego con Json.Parse()lo convertimos a formato objeto para poder manipularlo.
-        const productsList = await fs.promises.readFile(this.path,"utf-8")
-        const productsListParse = JSON.parse(productsList)
-        return productsListParse
+        try{
+            const productsList = await fs.promises.readFile(this.path,"utf-8")
+            const productsListParse = JSON.parse(productsList)
+            return productsListParse
+
+        //en caso de que se genere un error debido a que no exista el archivo que se intenta leer debido a que todavia no se agrego ningun producto, devolvemos this.products, el cual seria un array vacio.
+        }catch{
+            return this.products;
+        }
     }
 
     getProductById = async (searchId) => {
@@ -120,10 +126,19 @@ class ProductManager{
         // Leemos el contenido del archivo y lo guardamos en una variable. El contenido es un array de objetos.
         const productsList = await this.getProducts();
 
-        //guardamos en una variable todos los demas obajetos que no posean ese nro de id. Osea lo eliminamos.
+
+        //verificamos que el codigo con el id pasado como parametro exista
+        const existingCode = productsList.find(product =>product.id===searchId)
+        if(!existingCode){
+            console.error('ERROR: Codigo inexistente')
+            return
+        }
+
+        //caso contrario, guardamos en una variable todos los demas obajetos que posea un nuemero de id distinto al que pasamos por parametro. Osea lo eliminamos.
         const updatedProductsList = productsList.filter(product => product.id !== searchId); 
         //sobreescribimos el archivo con la lista de productos actualizada
         await fs.promises.writeFile(this.path,JSON.stringify(updatedProductsList,null,2))
+        console.log('Producto eliminado correctamente')
         return updatedProductsList;  
     }
 }
@@ -132,6 +147,12 @@ class ProductManager{
 
 const productManager = new ProductManager('products.json');
 (async () => {
+
+    //=========array vacio=================
+
+    const noProducts = await productManager.getProducts();
+    console.log('All Products:', noProducts);
+
 
     //===============metodo addProduct:===============
 
@@ -189,7 +210,7 @@ const productManager = new ProductManager('products.json');
 
     // ==============metodo deleteproduct:===================
 
-    await productManager.deleteProduct(2);
+    await productManager.deleteProduct(27);
     const remainingProducts = await productManager.getProducts();
     console.log('Remaining Products:', remainingProducts);
 
