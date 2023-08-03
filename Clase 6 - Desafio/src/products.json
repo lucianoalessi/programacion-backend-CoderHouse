@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Monitor Asus",
+    "description": "Monitor led 24\" 75hz",
+    "price": 59.99,
+    "thumbnail": "path/to/image1.jpg",
+    "code": "PRD001",
+    "stock": 100,
+    "id": 1
+  },
+  {
+    "title": "Samsung Galaxy S23",
+    "description": "nuevo con caja sellada",
+    "price": 800.5,
+    "thumbnail": "path/to/image2.jpg",
+    "code": "PRD002",
+    "stock": 15,
+    "id": 2
+  },
+  {
+    "title": "Monitor presonus eris 5",
+    "description": "Monitores de estudio",
+    "price": 300.25,
+    "thumbnail": "path/to/image2.jpg",
+    "code": "PRD003",
+    "stock": 28,
+    "id": 3
+  }
+]
