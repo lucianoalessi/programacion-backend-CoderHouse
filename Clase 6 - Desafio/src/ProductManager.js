@@ -185,6 +185,69 @@ const productManager = new ProductManager('products.json');
         28
     );
 
+    await productManager.addProduct(
+        'Monitor samsung',
+        'Monitor led 32" 144hz',
+        59.99,
+        'path/to/image1.jpg',
+        'PRD004',
+        22
+    );
+
+    await productManager.addProduct(
+        'Samsung Galaxy S23 ultra',
+        'nuevo con caja sellada',
+        100.50,
+        'path/to/image2.jpg',
+        'PRD005',
+        93
+    );
+
+    await productManager.addProduct(
+        'Monitores kkr 10',
+        'Monitores de estudio',
+        300.25,
+        'path/to/image2.jpg',
+        'PRD006',
+        82
+    );
+
+    await productManager.addProduct(
+        'Teclado mecanico logitech',
+        'teclado con switch blue',
+        25,
+        'path/to/image2.jpg',
+        'PRD007',
+        500
+    );
+
+    await productManager.addProduct(
+        'Parlante JBL Go 4',
+        'Parlante inalambrico Hi-Fi',
+        30,
+        'path/to/image2.jpg',
+        'PRD008',
+        102
+    );
+
+    await productManager.addProduct(
+        'Go Pro Hero 9',
+        'Camara de accion',
+        30,
+        'path/to/image2.jpg',
+        'PRD009',
+        12
+    );
+
+    await productManager.addProduct(
+        'Traje neopren Oneil',
+        'traje grueso neopren',
+        200,
+        'path/to/image2.jpg',
+        'PRD010',
+        5
+    );
+
     //============metodo getProducts:=============
 
     const allProducts = await productManager.getProducts();
