@@ -8,7 +8,7 @@ const router = Router()
 // router.use(express.urlencoded({extended:true}))
 
 //creamos una nueva instancia de la clase ProductManager con la ruta donde se guardaran los productos.
-const manager = new ProductManager(__dirname + '../products.json')
+const manager = new ProductManager(__dirname + '/files/products.json') //NOTA: para poder acceder al archivo y leer el contenido dentro en el servidor tenemos que usar dirname y no ./files/products.json. (hay que eliminar los puntos para que funcione)
 
 //con app.get hacemos una apertura en un endpoint y le indicamos al protocolo HTTP que en la ruta /products esprara una peticion GET.
 router.get('/' , async (req, res) => {
@@ -42,5 +42,32 @@ router.get('/:pid' , async (req, res) => {
         res.send('Error: Producto inexistente')
     }      
 })
+
+
+router.post('/' , async (req, res) => {
+
+    const newProduct = req.body
+    const addProduct = await manager.addProduct(newProduct)
+    res.send({status:"sucess" , addProduct})
+})
+
+router.put('/:pid' , async (req, res) => {
+
+    const productID = req.params
+    const productFilter = await manager.getProductById(productID);
+    const update = req.body
+    const productUpdate = await manager.updateProduct(productFilter,update);
+
+    res.send({status:'Susess: product updated', productUpdate});
+})
+
+router.delete('/:pid', async (req, res) => {
+    const productID = req.params;
+    const productDeleted = await manager.deleteProduct(productID);
+
+    res.send({status:'product deleted susess', productDeleted});
+})
+
+
 
 export default router; 
