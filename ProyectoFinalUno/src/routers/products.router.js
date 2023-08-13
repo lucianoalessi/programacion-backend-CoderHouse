@@ -1,16 +1,15 @@
 import ProductManager from '../ProductManager.js'
 import { Router } from 'express';
 import {__dirname} from '../../utils.js'
+
 //Inicializamos la extencion de express, Router
 const router = Router()
 
-// //configuracion para que el servidor reciba datos complejos (esta configuracion se aconceja hacerla siempre):
-// router.use(express.urlencoded({extended:true}))
 
 //creamos una nueva instancia de la clase ProductManager con la ruta donde se guardaran los productos.
 const manager = new ProductManager(__dirname + '/files/products.json') //NOTA: para poder acceder al archivo y leer el contenido dentro en el servidor tenemos que usar dirname y no ./files/products.json. (hay que eliminar los puntos para que funcione)
 
-//con app.get hacemos una apertura en un endpoint y le indicamos al protocolo HTTP que en la ruta /products esprara una peticion GET.
+// cambiamos app.get por router.get
 router.get('/' , async (req, res) => {
 
     //obetenemos el array de objetos de productos y lo guardamos en una variable productos. Como estamos obteniendo info de una base de datos sera asincronica.
@@ -21,7 +20,7 @@ router.get('/' , async (req, res) => {
     //dependiendo el valor de limite que el usuario ingrese, enviaremos esa cantidad de productos. Si no agrega ningun valor mostraremos todos los productos.    
     if(limit){
         const productLimit = products.slice(0,limit);
-        res.send({productLimit}) //con res.send respondemos las peticiones del servidor
+        res.send({productLimit}) //con res.send respondemos las peticiones del servidor. Se aconseja enviarlas siempre dentro de un objeto.
     }else{
         res.send({products})
     }  
@@ -44,28 +43,32 @@ router.get('/:pid' , async (req, res) => {
 })
 
 
+// Con .post enviamos informacion al servidor. Con .get obtenemos informacion del servidor.
 router.post('/' , async (req, res) => {
 
-    const newProduct = req.body
-    const addProduct = await manager.addProduct(newProduct)
-    res.send({status:"sucess" , addProduct})
+    const newProduct = req.body                             // la informacion que enviara el cliente estara dentro del req.body.
+    const addProduct = await manager.addProduct(newProduct) //agregamos el producto enviado por el cliente.
+    res.send({status:"Sucess: Producto agregado"})          //devolvemos un estado si se agrego correctamente.
 })
 
+//con put modificamos informacion del servidor
 router.put('/:pid' , async (req, res) => {
 
-    const productID = req.params
-    const productFilter = await manager.getProductById(productID);
-    const update = req.body
-    const productUpdate = await manager.updateProduct(productFilter,update);
+    const productID = req.params //obtenemos el id de producto ingresado el cliente por paramas
+    const productFilter = await manager.getProductById(productID);  //filtramos el producto deseado
+    const update = req.body                                         //agregamos la informacion que actualizara el cliente en una variable
+    const productUpdate = await manager.updateProduct(productFilter,update); // actualizamos el producto filtrado
 
-    res.send({status:'Susess: product updated', productUpdate});
+    res.send({status:'Sucess: product updated', productUpdate});
 })
 
-router.delete('/:pid', async (req, res) => {
-    const productID = req.params;
-    const productDeleted = await manager.deleteProduct(productID);
 
-    res.send({status:'product deleted susess', productDeleted});
+//con delete eliminamos informacion del servidor
+router.delete('/:pid', async (req, res) => {
+    const productID = req.params;                                   //obtenemos el id de producto ingresado el cliente por paramas
+    const productDeleted = await manager.deleteProduct(productID);  //eliminamos el producto deseado
+
+    res.send({status:'Sucess: Producto eliminado'});                //devolvemos un estado si se elimino exitosamente
 })
 
 
